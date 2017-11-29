@@ -38,7 +38,7 @@ function initializeVariable() {
 initializeVariable
 
 ## 脚本运行判断第六个参数，权限参数是否正确
-if [[ -z $authority ]]; then
+if [[ -z $authority -o $authority = 'rw' ]]; then
     authority='rw'
 elif [[ $authority = 'r' ]]; then
     authority='r'
