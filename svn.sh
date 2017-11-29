@@ -87,7 +87,7 @@ function handelAll() {
     projectArr=$(ls $svnRootPath)
     for p in $projectArr; do
         if [[ ${ignoreProject[@]} =~ $p ]] ; then
-            echo "$p project has been ignored!"
+            echo "${p} project has been ignored!"
         else
             project=$p
             initializeVariable
@@ -115,6 +115,7 @@ function handelOperate() {
         echo "Operate command parameter error!"
         ;;
     esac
+    echo "${project} project has been executed successfully!"
 }
 
 ## 增加用户，设置权限，密码
