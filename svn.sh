@@ -87,7 +87,7 @@ function handelAll() {
     projectArr=$(ls $svnRootPath)
     for p in $projectArr; do
         if [[ ${ignoreProject[@]} =~ $p ]] ; then
-            echo "p in ary"
+            echo "$p project has been ignored!"
         else
             project=$p
             initializeVariable
