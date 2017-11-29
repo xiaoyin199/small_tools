@@ -8,7 +8,9 @@ svnRootPath='/file/svnroot/'
 svnEscapeRootPath='\/file\/svnroot\/'
 ## 定义web发布目录，钩子程序执行位置
 webRootPath='/file/web/dynamic/'
-
+## 定义需要排除不处理的项目
+ignoreProject=(bakconf conf)
+ 
 ## 参数都转换为小写处理
 ## 第一个参数动作
 action=$(echo $1 | tr '[A-Z]' '[a-z]')
@@ -23,12 +25,17 @@ password=$5
 ## 设置用户的权限rw，r，只接受rw，r两个参数
 authority=$6
 
-## 项目路径
-svnProjectPath=$svnRootPath$project
-## 配置文件路径
-svnservePath=$svnProjectPath'/conf/svnserve.conf'
-authzPath=$svnProjectPath'/conf/authz'
-passwdPath=$svnProjectPath'/conf/passwd'
+## 初始化变量
+function initializeVariable() {
+    ## 项目路径
+    svnProjectPath=$svnRootPath$project
+    ## 配置文件路径
+    svnservePath=$svnProjectPath'/conf/svnserve.conf'
+    authzPath=$svnProjectPath'/conf/authz'
+    passwdPath=$svnProjectPath'/conf/passwd'
+}
+## 自动运行初始化变量
+initializeVariable
 
 ## 脚本运行判断第六个参数，权限参数是否正确
 if [[ -z $authority ]]; then
@@ -59,33 +66,55 @@ function create() {
 ## 管理SVN项目，用户权限
 function update() {
     if [[ $project = 'all' ]]; then
-        echo 'gong neng kai fa zhong!'
+        if [[ -z $username ]]; then
+            echo "username parameters is error!"
+        else
+            handelAll
+        fi
     elif [[ ! -d $svnProjectPath ]]; then
         echo "The project does not exists!"
     else
         if [[ -z $username ]]; then
             echo "username parameters is error!"
         else
-            ## 处理的具体操作add,del,edit
-            case $operate in
-                add)
-                addUser
-                ;;
-
-                edit)
-                editUser
-                ;;
-
-                del)
-                delUser
-                ;;
-
-                *)
-                echo "Operate command parameter error!"
-                ;;
-            esac
+            handelOperate
         fi
     fi
+}
+
+## 处理所有项目
+function handelAll() {
+    projectArr=$(ls $svnRootPath)
+    for p in $projectArr; do
+        if [[ ${ignoreProject[@]} =~ $p ]] ; then
+            echo "p in ary"
+        else
+            project=$p
+            initializeVariable
+            handelOperate
+        fi
+    done
+}
+
+## 处理的具体操作add,del,edit
+function handelOperate() {
+    case $operate in
+        add)
+        addUser
+        ;;
+
+        edit)
+        editUser
+        ;;
+
+        del)
+        delUser
+        ;;
+
+        *)
+        echo "Operate command parameter error!"
+        ;;
+    esac
 }
 
 ## 增加用户，设置权限，密码
