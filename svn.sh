@@ -78,6 +78,7 @@ function update() {
             echo "username parameters is error!"
         else
             handelOperate
+            echo "${project} project has been executed successfully!"
         fi
     fi
 }
@@ -92,6 +93,7 @@ function handelAll() {
             project=$p
             initializeVariable
             handelOperate
+            echo "${project} project has been executed successfully!"
         fi
     done
 }
@@ -115,7 +117,6 @@ function handelOperate() {
         echo "Operate command parameter error!"
         ;;
     esac
-    echo "${project} project has been executed successfully!"
 }
 
 ## 增加用户，设置权限，密码
