@@ -40,7 +40,7 @@ initializeVariable
 ## 脚本运行判断第六个参数，权限参数是否正确
 if [[ -z $authority ]]; then
     authority='rw'
-elif [[ $authority='r' ]]; then
+elif [[ $authority = 'r' ]]; then
     authority='r'
 else
     echo "authority parameters is error!"
