@@ -24,6 +24,8 @@ username=$(echo $4 | tr '[A-Z]' '[a-z]')
 password=$5
 ## 设置用户的权限rw，r，只接受rw，r两个参数
 authority=$6
+## 是否输出字符
+showStr='del'
 
 ## 初始化变量
 function initializeVariable() {
@@ -78,7 +80,6 @@ function update() {
             echo "username parameters is error!"
         else
             handelOperate
-            echo "${project} project has been executed successfully!"
         fi
     fi
 }
@@ -93,7 +94,6 @@ function handelAll() {
             project=$p
             initializeVariable
             handelOperate
-            echo "${project} project has been executed successfully!"
         fi
     done
 }
@@ -124,9 +124,11 @@ function addUser() {
     if [[ -z $password ]]; then
         echo "password parameters is error!"
     else
+        showStr='add'
         delUser
         echo "${username} = ${authority}" >> $authzPath
         echo "${username} = ${password}" >> $passwdPath
+        echo "${project} project has been executed successfully!"
     fi
 }
 
@@ -134,6 +136,9 @@ function addUser() {
 function delUser() {
     sed -i "/${username} =/d" $authzPath
     sed -i "/${username} =/d" $passwdPath
+    if [[ $showStr = 'del' ]]; then
+        echo "${project} project has been executed successfully!"
+    fi
 }
 
 ## 编辑用户，编辑权限、密码
