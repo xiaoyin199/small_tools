@@ -158,7 +158,7 @@ function initSvnConfig() {
     sed -i "s/# password-db = passwd/password-db = passwd/" $svnservePath
     sed -i "s/# authz-db = authz/authz-db = authz/" $svnservePath
     sed -i "s/# realm = My First Repository/realm = ${svnEscapeRootPath}${project}/" $svnservePath
-    echo -e "\n[\\]" >> $authzPath
+    echo -e "\n[/]" >> $authzPath
 }
 
 ## 根据参数执行响应动作
